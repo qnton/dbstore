@@ -12,17 +12,17 @@ RUN go mod download
 COPY . .
 
 # Build the dumper sub-project
-WORKDIR /app/dumper
+WORKDIR /app/internal/dumper
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app/bin/dumper
 
 # Build the main sub-project
-WORKDIR /app
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/bin/main
+WORKDIR /app/cmd
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/bin/dbstore
 
 # Final image
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /app/bin/dumper .
-COPY --from=builder /app/bin/main .
-CMD ["./main"]
+COPY --from=builder /app/bin/dbstore .
+CMD ["./dbstore"]

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
-	"dbstore/dumper"
+	"dbstore/internal/dumper"
 	"fmt"
 	"io"
 	"log"
@@ -102,14 +102,14 @@ func main() {
 	log.Println("Starting application...")
 
 	cfg := Config{
-		DatabaseHost:          os.Getenv("DATABASE_HOST"),
-		DatabaseName:          os.Getenv("DATABASE_NAME"),
-		DatabaseUser:          os.Getenv("DATABASE_USER"),
-		DatabasePassword:      os.Getenv("DATABASE_PASSWORD"),
-		BucketEndpoint:        os.Getenv("BUCKET_ENDPOINT"),
-		BucketAccessKeyID:     os.Getenv("BUCKET_ACCESS_KEY_ID"),
-		BucketSecretAccessKey: os.Getenv("BUCKET_SECRET_ACCESS_KEY"),
-		BucketName:            os.Getenv("BUCKET_NAME"),
+		DatabaseHost:          os.Getenv("DB_HOST"),
+		DatabaseName:          os.Getenv("DB_NAME"),
+		DatabaseUser:          os.Getenv("DB_USER"),
+		DatabasePassword:      os.Getenv("DB_PASSWORD"),
+		BucketEndpoint:        os.Getenv("S3_ENDPOINT"),
+		BucketAccessKeyID:     os.Getenv("S3_ACCESS_KEY_ID"),
+		BucketSecretAccessKey: os.Getenv("S3_SECRET_ACCESS_KEY"),
+		BucketName:            os.Getenv("S3_NAME"),
 		Password:              os.Getenv("PASSWORD"),
 	}
 

@@ -67,17 +67,14 @@ UNLOCK TABLES;
 -- Dump completed on {{ .CompleteTime }}
 `
 
-// Creates a MYSQL Dump based on the options supplied through the dumper.
 func (d *Dumper) Dump() (string, error) {
 	name := d.name
 	p := path.Join(d.dir, name+".sql")
 
-	// Check dump directory
 	if e, _ := exists(p); e {
 		return p, errors.New("Dump '" + name + "' already exists.")
 	}
 
-	// Create .sql file
 	f, err := os.Create(p)
 
 	if err != nil {
@@ -91,18 +88,15 @@ func (d *Dumper) Dump() (string, error) {
 		Tables:      make([]*table, 0),
 	}
 
-	// Get server version
 	if data.ServerVersion, err = getServerVersion(d.db); err != nil {
 		return p, err
 	}
 
-	// Get tables
 	tables, err := getTables(d.db)
 	if err != nil {
 		return p, err
 	}
 
-	// Get sql for each table
 	for _, name := range tables {
 		if t, err := createTable(d.db, name); err == nil {
 			data.Tables = append(data.Tables, t)
@@ -111,10 +105,8 @@ func (d *Dumper) Dump() (string, error) {
 		}
 	}
 
-	// Set complete time
 	data.CompleteTime = time.Now().String()
 
-	// Write dump to file
 	t, err := template.New("sqldump").Parse(tmpl)
 	if err != nil {
 		return p, err
@@ -129,14 +121,12 @@ func (d *Dumper) Dump() (string, error) {
 func getTables(db *sql.DB) ([]string, error) {
 	tables := make([]string, 0)
 
-	// Get table list
 	rows, err := db.Query("SHOW TABLES")
 	if err != nil {
 		return tables, err
 	}
 	defer rows.Close()
 
-	// Read result
 	for rows.Next() {
 		var table sql.NullString
 		if err := rows.Scan(&table); err != nil {
@@ -171,7 +161,6 @@ func createTable(db *sql.DB, name string) (*table, error) {
 }
 
 func createTableSQL(db *sql.DB, name string) (string, error) {
-	// Get table creation SQL
 	var table_return sql.NullString
 	var table_sql sql.NullString
 	err := db.QueryRow("SHOW CREATE TABLE "+name).Scan(&table_return, &table_sql)
@@ -180,21 +169,19 @@ func createTableSQL(db *sql.DB, name string) (string, error) {
 		return "", err
 	}
 	if table_return.String != name {
-		return "", errors.New("Returned table is not the same as requested table")
+		return "", errors.New("returned table is not the same as requested table")
 	}
 
 	return table_sql.String, nil
 }
 
 func createTableValues(db *sql.DB, name string) (string, error) {
-	// Get Data
 	rows, err := db.Query("SELECT * FROM " + name)
 	if err != nil {
 		return "", err
 	}
 	defer rows.Close()
 
-	// Get columns
 	columns, err := rows.Columns()
 	if err != nil {
 		return "", err
@@ -203,21 +190,15 @@ func createTableValues(db *sql.DB, name string) (string, error) {
 		return "", errors.New("No columns in table " + name + ".")
 	}
 
-	// Read data
 	data_text := make([]string, 0)
 	for rows.Next() {
-		// Init temp data storage
-
-		//ptrs := make([]interface{}, len(columns))
-		//var ptrs []interface {} = make([]*sql.NullString, len(columns))
 
 		data := make([]*sql.NullString, len(columns))
 		ptrs := make([]interface{}, len(columns))
-		for i, _ := range data {
+		for i := range data {
 			ptrs[i] = &data[i]
 		}
 
-		// Read data
 		if err := rows.Scan(ptrs...); err != nil {
 			return "", err
 		}
