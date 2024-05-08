@@ -13,11 +13,11 @@ COPY . .
 
 # Build the dumper sub-project
 WORKDIR /app/internal/dumper
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/bin/dumper
+RUN go build -o /app/bin/dumper
 
 # Build the main sub-project
 WORKDIR /app/cmd
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/bin/dbstore
+RUN go build -o /app/bin/dbstore
 
 # Final image
 FROM alpine:latest

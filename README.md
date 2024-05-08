@@ -52,17 +52,17 @@ services:
   app:
     build: .
     environment:
-    DB_USER: <your_db_user>
-    DB_NAME: <your_db_name>
-    DB_PASSWORD: <your_db_password>
-    DB_HOST: <your_db_host>
-    S3_NAME: <your_s3_name>
-    S3_ENDPOINT: <your_s3_endpoint>
-    S3_ACCESS_KEY_ID: <your_access_key_id>
-    S3_SECRET_ACCESS_KEY: <your_secret_access_key>
-    ATTEMPTS: <your_attempts>
-    PASSWORD: <your_password>
-    INTERVAL: <your_interval>
+      DB_USER: <your_db_user>
+      DB_NAME: <your_db_name>
+      DB_PASSWORD: <your_db_password>
+      DB_HOST: <your_db_host>
+      S3_NAME: <your_s3_name>
+      S3_ENDPOINT: <your_s3_endpoint>
+      S3_ACCESS_KEY_ID: <your_access_key_id>
+      S3_SECRET_ACCESS_KEY: <your_secret_access_key>
+      ATTEMPTS: <your_attempts>
+      PASSWORD: <your_password>
+      INTERVAL: <your_interval>
 ```
 
 ```bash
